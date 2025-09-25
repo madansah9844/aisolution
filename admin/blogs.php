@@ -1,6 +1,6 @@
 <?php
 /**
- * Blog Management for AI-Solution Admin Panel
+ * Blog Management for AI-Solutions Admin Panel
  */
 
 session_start();
@@ -40,7 +40,6 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
         set_flash_message('danger', 'Error deleting blog post: ' . $e->getMessage());
     }
 
-    // Redirect to avoid form resubmission
     header("Location: blogs.php");
     exit;
 }
@@ -70,7 +69,6 @@ if (isset($_GET['toggle']) && is_numeric($_GET['toggle'])) {
         set_flash_message('danger', 'Error updating blog post status: ' . $e->getMessage());
     }
 
-    // Redirect to avoid form resubmission
     header("Location: blogs.php");
     exit;
 }
@@ -78,7 +76,7 @@ if (isset($_GET['toggle']) && is_numeric($_GET['toggle'])) {
 // Process blog post form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_blog'])) {
     $title = sanitize_input($_POST['title']);
-    $content = strip_tags($_POST['content']); // Rich text, don't sanitize too much
+    $content = $_POST['content']; // Don't sanitize rich text content
     $excerpt = sanitize_input($_POST['excerpt']);
     $author = sanitize_input($_POST['author']);
     $category = sanitize_input($_POST['category']);
@@ -163,7 +161,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_blog'])) {
         $action_text = ($id > 0) ? 'updated' : 'created';
         set_flash_message('success', "Blog post {$action_text} successfully!");
 
-        // Redirect to blog list
         header("Location: blogs.php");
         exit;
 
@@ -207,603 +204,141 @@ $blog_posts = $stmt->fetchAll();
 $cat_sql = "SELECT DISTINCT category FROM blogs WHERE category IS NOT NULL ORDER BY category";
 $cat_stmt = $pdo->query($cat_sql);
 $categories = $cat_stmt->fetchAll();
+
+include 'includes/header.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Management - AI-Solution Admin</title>
-
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="../css/styles.css">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-   <!-- TinyMCE -->
+<!-- TinyMCE -->
 <script src="https://cdn.tiny.cloud/1/1ksxgzgtonnc1k4kpdno306cy0aydw8tlezaq33570xtg6y9/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
+<!-- Blog Form Section -->
+<div class="admin-form">
+    <h3><?php echo $edit_mode ? 'Edit Blog Post' : 'Add New Blog Post'; ?></h3>
+    <form action="blogs.php" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="<?php echo $blog_post['id']; ?>">
 
-    <!-- Favicon -->
-    <link rel="icon" href="../images/logo.png" type="image/png">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" class="form-control" value="<?php echo htmlspecialchars($blog_post['title']); ?>" required>
+        </div>
 
-    <style>
-        :root {
-            --sidebar-width: 26rem;
-            --header-height: 6rem;
-        }
+        <div class="form-group">
+            <label for="excerpt">Excerpt (Short Description)</label>
+            <textarea id="excerpt" name="excerpt" class="form-control" rows="3" required><?php echo htmlspecialchars($blog_post['excerpt']); ?></textarea>
+        </div>
 
-        body {
-            background-color: #f3f4f6;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+        <div class="form-group">
+            <label for="content">Content</label>
+            <textarea id="content" name="content" class="form-control" rows="10"><?php echo htmlspecialchars($blog_post['content']); ?></textarea>
+        </div>
 
-        /* Admin Layout */
-        .admin-layout {
-            display: flex;
-            flex: 1;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: var(--sidebar-width);
-            background-color: var(--dark-color);
-            color: var(--light-color);
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            overflow-y: auto;
-            transition: var(--transition);
-            z-index: 1000;
-        }
-
-        .sidebar-header {
-            padding: 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar-logo img {
-            height: 4rem;
-            width: auto;
-            margin-right: 1rem;
-        }
-
-        .sidebar-logo span {
-            font-weight: 700;
-            font-size: 1.8rem;
-            color: var(--light-color);
-        }
-
-        .sidebar-menu {
-            padding: 2rem 0;
-        }
-
-        .menu-section {
-            margin-bottom: 3rem;
-        }
-
-        .menu-section-title {
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            color: var(--gray-color);
-            padding: 0 2rem;
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.1em;
-        }
-
-        .menu-list {
-            list-style: none;
-        }
-
-        .menu-item {
-            margin-bottom: 0.5rem;
-        }
-
-        .menu-link {
-            display: flex;
-            align-items: center;
-            padding: 1rem 2rem;
-            color: var(--gray-light);
-            transition: var(--transition);
-            font-size: 1.4rem;
-        }
-
-        .menu-link:hover,
-        .menu-link.active {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: var(--light-color);
-        }
-
-        .menu-icon {
-            margin-right: 1.5rem;
-            width: 1.8rem;
-            text-align: center;
-            font-size: 1.6rem;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: var(--sidebar-width);
-            padding: 2rem;
-            transition: var(--transition);
-        }
-
-        /* Admin Header */
-        .admin-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: var(--header-height);
-            padding: 0 2rem;
-            background-color: var(--light-color);
-            border-bottom: 1px solid var(--gray-light);
-            margin-bottom: 2rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-
-        .header-title h1 {
-            font-size: 2.4rem;
-            margin-bottom: 0;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-dropdown {
-            position: relative;
-            margin-left: 2rem;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            padding: 0.8rem 1.2rem;
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-        }
-
-        .user-info:hover {
-            background-color: var(--gray-light);
-        }
-
-        .user-name {
-            margin-right: 1rem;
-            font-weight: 500;
-        }
-
-        .user-avatar {
-            width: 3.6rem;
-            height: 3.6rem;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            color: var(--light-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            margin-right: 1rem;
-        }
-
-        /* Admin Form Styles */
-        .admin-form {
-            background-color: var(--light-color);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 2rem;
-            margin-bottom: 3rem;
-        }
-
-
-        .admin-form h3 {
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-light);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid var(--gray-light);
-            border-radius: var(--border-radius);
-            font-size: 1.6rem;
-        }
-
-        .form-check {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .form-check-input {
-            margin-right: 1rem;
-            width: 1.8rem;
-            height: 1.8rem;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .image-preview {
-            margin-top: 1rem;
-            text-align: center;
-        }
-
-        .image-preview img {
-            max-width: 100%;
-            max-height: 20rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-        /* Table Styles */
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: var(--light-color);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--box-shadow);
-            margin-bottom: 3rem;
-        }
-
-        .admin-table th,
-        .admin-table td {
-            padding: 1.5rem;
-            text-align: left;
-            border-bottom: 1px solid var(--gray-light);
-        }
-
-        .admin-table th {
-            background-color: var(--primary-color);
-            color: var(--light-color);
-            font-weight: 600;
-        }
-
-        .admin-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .admin-table tr:hover {
-            background-color: rgba(0, 0, 0, 0.02);
-        }
-
-        .table-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn-action {
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius);
-            font-size: 1.4rem;
-        }
-
-        .btn-edit {
-            background-color: var(--primary-color);
-            color: var(--light-color);
-        }
-
-        .btn-delete {
-            background-color: var(--danger-color);
-            color: var(--light-color);
-        }
-
-        .btn-publish, .btn-unpublish {
-            background-color: var(--success-color);
-            color: var(--light-color);
-        }
-
-        .btn-unpublish {
-            background-color: var(--warning-color);
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-size: 1.2rem;
-            font-weight: 500;
-        }
-
-        .status-published {
-            background-color: var(--success-color);
-            color: var(--light-color);
-        }
-
-        .status-draft {
-            background-color: var(--gray-light);
-            color: var(--dark-color);
-        }
-    </style>
-</head>
-<body>
-    <div class="admin-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-logo">
-                    <img src="../images/logo.png" alt="AI-Solution Logo">
-                    <span>AI-Solution</span>
-                </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" id="author" name="author" class="form-control" value="<?php echo htmlspecialchars($blog_post['author']); ?>" required>
             </div>
 
-            <div class="sidebar-menu">
-                <div class="menu-section">
-                    <h4 class="menu-section-title">Main</h4>
-                    <ul class="menu-list">
-                        <li class="menu-item">
-                            <a href="index.php" class="menu-link">
-                                <i class="menu-icon fas fa-tachometer-alt"></i>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="inquiries.php" class="menu-link">
-                                <i class="menu-icon fas fa-envelope"></i>
-                                <span>Manage Inquires</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="analytics.php" class="menu-link">
-                                <i class="menu-icon fas fa-chart-bar"></i>
-                                <span>Visitor Analytics</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="menu-section">
-                    <h4 class="menu-section-title">Content</h4>
-                    <ul class="menu-list">
-                        <li class="menu-item">
-                            <a href="logo.php" class="menu-link">
-                                <i class="menu-icon fas fa-image"></i>
-                                <span>Logo Management</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="portfolio.php" class="menu-link">
-                                <i class="menu-icon fas fa-briefcase"></i>
-                                <span>Portfolio Management</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="events.php" class="menu-link">
-                                <i class="menu-icon fas fa-calendar"></i>
-                                <span>Events Management</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="blogs.php" class="menu-link active">
-                                <i class="menu-icon fas fa-blog"></i>
-                                <span>Blog Management</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="gallery.php" class="menu-link">
-                                <i class="menu-icon fas fa-images"></i>
-                                <span>Manage Gallery</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="menu-section">
-                    <h4 class="menu-section-title">User</h4>
-                    <ul class="menu-list">
-                        <li class="menu-item">
-                            <a href="users.php" class="menu-link">
-                                <i class="menu-icon fas fa-users"></i>
-                                <span>Manage Users</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="password.php" class="menu-link">
-                                <i class="menu-icon fas fa-key"></i>
-                                <span>Change Password</span>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="index.php?logout=true" class="menu-link">
-                                <i class="menu-icon fas fa-sign-out-alt"></i>
-                                <span>Logout</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" id="category" name="category" class="form-control" value="<?php echo htmlspecialchars($blog_post['category']); ?>" list="categories" required>
+                <datalist id="categories">
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?php echo htmlspecialchars($category['category']); ?>">
+                    <?php endforeach; ?>
+                </datalist>
             </div>
-        </aside>
+        </div>
 
-        <!-- Main Content -->
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Admin Header -->
-            <header class="admin-header">
-                <div class="header-title">
-                    <h1>All Blogs</h1>
+        <div class="form-group">
+            <label for="image">Featured Image</label>
+            <input type="file" id="image" name="image" class="form-control" accept="image/*">
+            <?php if (!empty($blog_post['image'])): ?>
+                <div class="image-preview">
+                    <img src="../images/blogs/<?php echo htmlspecialchars($blog_post['image']); ?>" alt="Current Image">
+                    <p>Current image: <?php echo htmlspecialchars($blog_post['image']); ?></p>
                 </div>
+            <?php endif; ?>
+        </div>
 
-                <div class="header-actions">
-                    <div class="user-dropdown">
-                        <div class="user-info">
-                            <div class="user-avatar">
-                                <?php echo strtoupper(substr($admin_username, 0, 1)); ?>
-                            </div>
-                            <span class="user-name"><?php echo htmlspecialchars($admin_username); ?></span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                    </div>
-                </div>
-            </header>
+        <div class="form-check">
+            <input type="checkbox" id="published" name="published" class="form-check-input" <?php echo $blog_post['published'] ? 'checked' : ''; ?>>
+            <label for="published" class="form-check-label">Publish this blog post</label>
+        </div>
 
-            <!-- Flash Messages -->
-            <?php display_flash_message(); ?>
+        <div class="btn-group">
+            <button type="submit" name="save_blog" class="btn btn-primary">
+                <?php echo $edit_mode ? 'Update Blog Post' : 'Add Blog Post'; ?>
+            </button>
+            <a href="blogs.php" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
 
-            <!-- Blog Form Section -->
-            <section class="admin-section">
-                <div class="admin-form">
-                    <h3><?php echo $edit_mode ? 'Edit Blog Post' : 'Add New Blog Post'; ?></h3>
-                    <form action="blogs.php" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="id" value="<?php echo $blog_post['id']; ?>">
+<!-- Blog List Section -->
+<div class="admin-form">
+    <h3>All Blog Posts</h3>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (count($blog_posts) > 0): ?>
+                <?php foreach ($blog_posts as $post): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($post['title']); ?></td>
+                        <td><?php echo htmlspecialchars($post['author']); ?></td>
+                        <td><?php echo htmlspecialchars($post['category']); ?></td>
+                        <td><?php echo date('M d, Y', strtotime($post['created_at'])); ?></td>
+                        <td>
+                            <span class="status-badge <?php echo $post['published'] ? 'status-published' : 'status-draft'; ?>">
+                                <?php echo $post['published'] ? 'Published' : 'Draft'; ?>
+                            </span>
+                        </td>
+                        <td class="table-actions">
+                            <a href="blogs.php?edit=<?php echo $post['id']; ?>" class="btn btn-primary btn-action">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a href="blogs.php?toggle=<?php echo $post['id']; ?>" class="btn <?php echo $post['published'] ? 'btn-warning' : 'btn-success'; ?> btn-action">
+                                <i class="fas <?php echo $post['published'] ? 'fa-eye-slash' : 'fa-eye'; ?>"></i>
+                                <?php echo $post['published'] ? 'Unpublish' : 'Publish'; ?>
+                            </a>
+                            <a href="blogs.php?delete=<?php echo $post['id']; ?>" class="btn btn-danger btn-action btn-delete">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="6" class="text-center">No blog posts found. Add your first blog post using the form above.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
 
-                        <div class="form-group">
-                            <label for="title">Title</label>
-                            <input type="text" id="title" name="title" class="form-control" value="<?php echo htmlspecialchars($blog_post['title']); ?>" required>
-                        </div>
+<script>
+// Initialize TinyMCE
+tinymce.init({
+    selector: '#content',
+    height: 400,
+    menubar: true,
+    plugins: [
+        'advlist autolink lists link image charmap print preview anchor',
+        'searchreplace visualblocks code fullscreen',
+        'insertdatetime media table paste code help wordcount'
+    ],
+    toolbar: 'undo redo | formatselect | bold italic backcolor | \
+            alignleft aligncenter alignright alignjustify | \
+            bullist numlist outdent indent | removeformat | help'
+});
+</script>
 
-                        <div class="form-group">
-                            <label for="excerpt">Excerpt (Short Description)</label>
-                            <textarea id="excerpt" name="excerpt" class="form-control" rows="3" required><?php echo htmlspecialchars($blog_post['excerpt']); ?></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="content">Content</label>
-                            <textarea id="content" name="content" class="form-control" rows="10"><?php echo htmlspecialchars($blog_post['content']); ?></textarea>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="author">Author</label>
-                                <input type="text" id="author" name="author" class="form-control" value="<?php echo htmlspecialchars($blog_post['author']); ?>" required>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="category">Category</label>
-                                <input type="text" id="category" name="category" class="form-control" value="<?php echo htmlspecialchars($blog_post['category']); ?>" list="categories" required>
-                                <datalist id="categories">
-                                    <?php foreach ($categories as $category): ?>
-                                        <option value="<?php echo htmlspecialchars($category['category']); ?>">
-                                    <?php endforeach; ?>
-                                </datalist>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="image">Featured Image</label>
-                            <input type="file" id="image" name="image" class="form-control" accept="image/*">
-                            <?php if (!empty($blog_post['image'])): ?>
-                                <div class="image-preview">
-                                    <img src="../images/blogs/<?php echo htmlspecialchars($blog_post['image']); ?>" alt="Current Image">
-                                    <p>Current image: <?php echo htmlspecialchars($blog_post['image']); ?></p>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-
-                        <div class="form-check">
-                            <input type="checkbox" id="published" name="published" class="form-check-input" <?php echo $blog_post['published'] ? 'checked' : ''; ?>>
-                            <label for="published" class="form-check-label">Publish this blog post</label>
-                        </div>
-
-                        <div class="btn-group">
-                            <button type="submit" name="save_blog" class="btn btn-primary">
-                                <?php echo $edit_mode ? 'Update Blog Post' : 'Add Blog Post'; ?>
-                            </button>
-                            <a href="blogs.php" class="btn btn-secondary">Cancel</a>
-                        </div>
-                    </form>
-                </div>
-            </section>
-
-            <!-- Blog List Section -->
-            <section class="admin-section">
-                <h3>All Blog Posts</h3>
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Category</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (count($blog_posts) > 0): ?>
-                            <?php foreach ($blog_posts as $post): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($post['title']); ?></td>
-                                    <td><?php echo htmlspecialchars($post['author']); ?></td>
-                                    <td><?php echo htmlspecialchars($post['category']); ?></td>
-                                    <td><?php echo date('M d, Y', strtotime($post['created_at'])); ?></td>
-                                    <td>
-                                        <span class="status-badge <?php echo $post['published'] ? 'status-published' : 'status-draft'; ?>">
-                                            <?php echo $post['published'] ? 'Published' : 'Draft'; ?>
-                                        </span>
-                                    </td>
-                                    <td class="table-actions">
-                                        <a href="blogs.php?edit=<?php echo $post['id']; ?>" class="btn-action btn-edit">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </a>
-                                        <a href="blogs.php?toggle=<?php echo $post['id']; ?>" class="btn-action <?php echo $post['published'] ? 'btn-unpublish' : 'btn-publish'; ?>">
-                                            <i class="fas <?php echo $post['published'] ? 'fa-eye-slash' : 'fa-eye'; ?>"></i>
-                                            <?php echo $post['published'] ? 'Unpublish' : 'Publish'; ?>
-                                        </a>
-                                        <a href="blogs.php?delete=<?php echo $post['id']; ?>" class="btn-action btn-delete" onclick="return confirm('Are you sure you want to delete this blog post?');">
-                                            <i class="fas fa-trash"></i> Delete
-                                        </a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="6" style="text-align: center;">No blog posts found. Add your first blog post using the form above.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </section>
-        </main>
-    </div>
-
-    <!-- Scripts -->
-    <script>
-        // Initialize TinyMCE
-        tinymce.init({
-            selector: '#content',
-            height: 400,
-            menubar: true,
-            plugins: [
-                'advlist autolink lists link image charmap print preview anchor',
-                'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table paste code help wordcount'
-            ],
-            toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                    alignleft aligncenter alignright alignjustify | \
-                    bullist numlist outdent indent | removeformat | help'
-        });
-    </script>
-</body>
-</html>
+<?php include 'includes/footer.php'; ?>

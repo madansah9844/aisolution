@@ -13,8 +13,6 @@ if (!is_logged_in()) {
 }
 
 $page_title = "Company Settings";
-$success_message = '';
-$error_message = '';
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -81,20 +79,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute();
         }
 
-        // Log the activity
-        $logSql = "INSERT INTO activity_log (user_id, activity, ip_address)
-                  VALUES (:user_id, :activity, :ip_address)";
-        $logStmt = $pdo->prepare($logSql);
-        $activity = "Company settings updated";
-        $logStmt->bindParam(':user_id', $_SESSION['admin_id'], PDO::PARAM_INT);
-        $logStmt->bindParam(':activity', $activity, PDO::PARAM_STR);
-        $logStmt->bindParam(':ip_address', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-        $logStmt->execute();
-
-        $success_message = "Company settings updated successfully!";
+        set_flash_message('success', "Company settings updated successfully!");
 
     } catch (Exception $e) {
-        $error_message = $e->getMessage();
+        set_flash_message('danger', $e->getMessage());
     }
 }
 
@@ -105,7 +93,7 @@ try {
     $stmt->execute();
     $settings_data = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 } catch (PDOException $e) {
-    $error_message = "Error loading settings";
+    set_flash_message('danger', "Error loading settings");
     $settings_data = [];
 }
 
@@ -122,420 +110,77 @@ $defaults = [
 
 $settings_data = array_merge($defaults, $settings_data);
 
-$page_title = "Company Settings";
 include 'includes/header.php';
 ?>
 
-<div class="settings-container">
-    <div class="settings-header">
-        <h2>Company Settings</h2>
-        <p>Manage your company logo, favicon, and general information</p>
-    </div>
+<div class="admin-form">
+    <h3>Company Information</h3>
+    <form method="POST" enctype="multipart/form-data" id="settingsForm">
+        <div class="form-group">
+            <label for="company_name">Company Name</label>
+            <input type="text" id="company_name" name="company_name" class="form-control"
+                   value="<?php echo htmlspecialchars($settings_data['company_name']); ?>" required>
+        </div>
 
-    <div class="settings-content">
-        <?php if ($success_message): ?>
-            <div class="flash-message success"><?php echo $success_message; ?></div>
-        <?php endif; ?>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="company_email">Email Address</label>
+                <input type="email" id="company_email" name="company_email" class="form-control"
+                       value="<?php echo htmlspecialchars($settings_data['company_email']); ?>" required>
+            </div>
 
-        <?php if ($error_message): ?>
-            <div class="flash-message error"><?php echo $error_message; ?></div>
-        <?php endif; ?>
+            <div class="form-group">
+                <label for="company_phone">Phone Number</label>
+                <input type="text" id="company_phone" name="company_phone" class="form-control"
+                       value="<?php echo htmlspecialchars($settings_data['company_phone']); ?>">
+            </div>
+        </div>
 
-        <form method="POST" enctype="multipart/form-data" id="settingsForm">
-            <div class="settings-grid">
-                <!-- Company Information -->
-                <div class="settings-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-building"></i> Company Information</h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="form-group">
-                            <label for="company_name">Company Name</label>
-                            <input type="text" id="company_name" name="company_name" 
-                                   value="<?php echo htmlspecialchars($settings_data['company_name']); ?>" required>
-                        </div>
+        <div class="form-group">
+            <label for="company_address">Address</label>
+            <textarea id="company_address" name="company_address" class="form-control" rows="3"><?php echo htmlspecialchars($settings_data['company_address']); ?></textarea>
+        </div>
 
-                        <div class="form-group">
-                            <label for="company_email">Email Address</label>
-                            <input type="email" id="company_email" name="company_email" 
-                                   value="<?php echo htmlspecialchars($settings_data['company_email']); ?>" required>
-                        </div>
+        <div class="form-group">
+            <label for="company_description">Company Description</label>
+            <textarea id="company_description" name="company_description" class="form-control" rows="4"><?php echo htmlspecialchars($settings_data['company_description']); ?></textarea>
+        </div>
 
-                        <div class="form-group">
-                            <label for="company_phone">Phone Number</label>
-                            <input type="text" id="company_phone" name="company_phone" 
-                                   value="<?php echo htmlspecialchars($settings_data['company_phone']); ?>">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="company_address">Address</label>
-                            <textarea id="company_address" name="company_address" rows="3"><?php echo htmlspecialchars($settings_data['company_address']); ?></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="company_description">Company Description</label>
-                            <textarea id="company_description" name="company_description" rows="4"><?php echo htmlspecialchars($settings_data['company_description']); ?></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Logo Settings -->
-                <div class="settings-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-image"></i> Logo Settings</h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="current-logo">
-                            <h4>Current Logo</h4>
-                            <div class="logo-preview">
-                                <img src="../<?php echo htmlspecialchars($settings_data['company_logo']); ?>" 
-                                     alt="Current Logo" id="currentLogo">
-                                <p class="logo-path"><?php echo htmlspecialchars($settings_data['company_logo']); ?></p>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="company_logo">Upload New Logo</label>
-                            <input type="file" id="company_logo" name="company_logo" 
-                                   accept="image/jpeg,image/jpg,image/png,image/gif,image/svg+xml">
-                            <p class="form-note">Recommended size: 200x60px. Supported formats: JPG, PNG, GIF, SVG</p>
-                        </div>
-
-                        <div class="logo-preview-new" id="logoPreview" style="display: none;">
-                            <h4>New Logo Preview</h4>
-                            <img id="newLogoPreview" alt="New Logo Preview">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Favicon Settings -->
-                <div class="settings-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-star"></i> Favicon Settings</h3>
-                    </div>
-                    <div class="card-content">
-                        <div class="current-favicon">
-                            <h4>Current Favicon</h4>
-                            <div class="favicon-preview">
-                                <img src="../<?php echo htmlspecialchars($settings_data['company_favicon']); ?>" 
-                                     alt="Current Favicon" id="currentFavicon">
-                                <p class="favicon-path"><?php echo htmlspecialchars($settings_data['company_favicon']); ?></p>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="company_favicon">Upload New Favicon</label>
-                            <input type="file" id="company_favicon" name="company_favicon" 
-                                   accept="image/x-icon,image/png,image/jpeg">
-                            <p class="form-note">Recommended size: 32x32px or 16x16px. Supported formats: ICO, PNG, JPG</p>
-                        </div>
-
-                        <div class="favicon-preview-new" id="faviconPreview" style="display: none;">
-                            <h4>New Favicon Preview</h4>
-                            <img id="newFaviconPreview" alt="New Favicon Preview">
-                        </div>
-                    </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="company_logo">Upload New Logo</label>
+                <input type="file" id="company_logo" name="company_logo" class="form-control"
+                       accept="image/jpeg,image/jpg,image/png,image/gif,image/svg+xml">
+                <div class="image-preview">
+                    <img src="../<?php echo htmlspecialchars($settings_data['company_logo']); ?>" 
+                         alt="Current Logo" id="currentLogo">
+                    <p>Current logo: <?php echo htmlspecialchars($settings_data['company_logo']); ?></p>
                 </div>
             </div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i>
-                    Save Settings
-                </button>
-                <a href="index.php" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i>
-                    Back to Dashboard
-                </a>
+            <div class="form-group">
+                <label for="company_favicon">Upload New Favicon</label>
+                <input type="file" id="company_favicon" name="company_favicon" class="form-control"
+                       accept="image/x-icon,image/png,image/jpeg">
+                <div class="image-preview">
+                    <img src="../<?php echo htmlspecialchars($settings_data['company_favicon']); ?>" 
+                         alt="Current Favicon" id="currentFavicon">
+                    <p>Current favicon: <?php echo htmlspecialchars($settings_data['company_favicon']); ?></p>
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
+
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i>
+                Save Settings
+            </button>
+            <a href="index.php" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                Back to Dashboard
+            </a>
+        </div>
+    </form>
 </div>
-
-<style>
-.settings-container {
-    max-width: 120rem;
-    margin: 0 auto;
-}
-
-.settings-header {
-    margin-bottom: 3rem;
-}
-
-.settings-header h2 {
-    font-size: 2.8rem;
-    margin-bottom: 0.5rem;
-}
-
-.settings-header p {
-    color: var(--gray-color);
-    font-size: 1.6rem;
-}
-
-.settings-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
-    gap: 3rem;
-    margin-bottom: 3rem;
-}
-
-.settings-card {
-    background-color: var(--light-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    overflow: hidden;
-}
-
-.card-header {
-    background-color: var(--gray-light);
-    padding: 2rem;
-    border-bottom: 1px solid var(--gray-light);
-}
-
-.card-header h3 {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 0;
-    font-size: 1.8rem;
-}
-
-.card-header i {
-    color: var(--primary-color);
-}
-
-.card-content {
-    padding: 2rem;
-}
-
-.form-group {
-    margin-bottom: 2rem;
-}
-
-.form-group label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.8rem;
-    color: var(--dark-color);
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 1.2rem;
-    border: 1px solid var(--gray-light);
-    border-radius: var(--border-radius);
-    font-size: 1.4rem;
-    transition: var(--transition);
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
-}
-
-.form-group input[type="file"] {
-    padding: 0.8rem;
-    border: 2px dashed var(--gray-light);
-    background-color: var(--body-bg);
-}
-
-.form-group input[type="file"]:hover {
-    border-color: var(--primary-color);
-}
-
-.form-note {
-    font-size: 1.2rem;
-    color: var(--gray-color);
-    margin-top: 0.5rem;
-    font-style: italic;
-}
-
-.current-logo,
-.current-favicon {
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--gray-light);
-}
-
-.current-logo h4,
-.current-favicon h4 {
-    margin-bottom: 1rem;
-    font-size: 1.4rem;
-}
-
-.logo-preview,
-.favicon-preview {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.logo-preview img,
-.favicon-preview img {
-    max-height: 6rem;
-    max-width: 20rem;
-    border: 1px solid var(--gray-light);
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    background-color: var(--body-bg);
-}
-
-.logo-path,
-.favicon-path {
-    font-size: 1.2rem;
-    color: var(--gray-color);
-    margin: 0;
-}
-
-.logo-preview-new,
-.favicon-preview-new {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--gray-light);
-}
-
-.logo-preview-new h4,
-.favicon-preview-new h4 {
-    margin-bottom: 1rem;
-    font-size: 1.4rem;
-}
-
-.logo-preview-new img,
-.favicon-preview-new img {
-    max-height: 6rem;
-    max-width: 20rem;
-    border: 1px solid var(--gray-light);
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    background-color: var(--body-bg);
-}
-
-.form-actions {
-    display: flex;
-    gap: 1rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--gray-light);
-}
-
-.btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 1.2rem 2rem;
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: 1.4rem;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.btn-primary {
-    background-color: var(--primary-color);
-    color: var(--dark-color);
-}
-
-.btn-primary:hover {
-    background-color: var(--secondary-color);
-}
-
-.btn-secondary {
-    background-color: var(--gray-light);
-    color: var(--dark-color);
-}
-
-.btn-secondary:hover {
-    background-color: var(--gray-color);
-}
-
-@media (max-width: 768px) {
-    .settings-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-actions {
-        flex-direction: column;
-    }
-    
-    .logo-preview,
-    .favicon-preview {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Logo preview
-    const logoInput = document.getElementById('company_logo');
-    const logoPreview = document.getElementById('logoPreview');
-    const newLogoPreview = document.getElementById('newLogoPreview');
-    const currentLogo = document.getElementById('currentLogo');
-
-    logoInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                newLogoPreview.src = e.target.result;
-                logoPreview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // Favicon preview
-    const faviconInput = document.getElementById('company_favicon');
-    const faviconPreview = document.getElementById('faviconPreview');
-    const newFaviconPreview = document.getElementById('newFaviconPreview');
-    const currentFavicon = document.getElementById('currentFavicon');
-
-    faviconInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                newFaviconPreview.src = e.target.result;
-                faviconPreview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // Form validation
-    document.getElementById('settingsForm').addEventListener('submit', function(e) {
-        const companyName = document.getElementById('company_name').value.trim();
-        const companyEmail = document.getElementById('company_email').value.trim();
-
-        if (!companyName) {
-            alert('Company name is required');
-            e.preventDefault();
-            return;
-        }
-
-        if (!companyEmail) {
-            alert('Company email is required');
-            e.preventDefault();
-            return;
-        }
-
-        if (companyEmail && !isValidEmail(companyEmail)) {
-            alert('Please enter a valid email address');
-            e.preventDefault();
-            return;
-        }
-    });
-
-    function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
-});
-</script>
 
 <?php include 'includes/footer.php'; ?>

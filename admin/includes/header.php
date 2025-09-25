@@ -1,7 +1,7 @@
 <?php
 /**
- * Admin Layout Header
- * Main header file that includes all components
+ * Universal Admin Header
+ * Used by all admin pages
  */
 
 // Check if user is logged in
@@ -11,8 +11,8 @@ if (!is_logged_in()) {
 
 // Get user info
 $user_id = $_SESSION['admin_id'];
-$username = $_SESSION['admin_username'];
-$user_role = $_SESSION['admin_role'];
+$admin_username = $_SESSION['admin_username'];
+$user_role = $_SESSION['admin_role'] ?? 'admin';
 
 // Get current page for active menu highlighting
 $current_page = basename($_SERVER['PHP_SELF']);
@@ -37,131 +37,125 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     <!-- Favicon -->
     <link rel="icon" href="../images/logo.png" type="image/png">
-
-    <style>
-        :root {
-            --primary-color: #FFD700;
-            --secondary-color: #FFA500;
-            --success-color: #32CD32;
-            --danger-color: #DC143C;
-            --warning-color: #FF6347;
-            --info-color: #FFD700;
-            --dark-color: #2F2F2F;
-            --gray-color: #808080;
-            --gray-light: #D3D3D3;
-            --light-color: #ffffff;
-            --body-bg: #FAFAFA;
-            --sidebar-width: 28rem;
-        }
-
-        /* Dark mode variables */
-        [data-theme="dark"] {
-            --body-bg: #1a1a1a;
-            --light-color: #2d2d2d;
-            --dark-color: #ffffff;
-            --gray-color: #b0b0b0;
-            --gray-light: #404040;
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            font-size: 1.6rem;
-            line-height: 1.6;
-            color: var(--dark-color);
-            background-color: var(--body-bg);
-            transition: all 0.3s ease;
-            margin: 0;
-            padding: 0;
-        }
-
-        .admin-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: var(--sidebar-width);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Content Area */
-        .content-area {
-            flex: 1;
-            padding: 2rem;
-            overflow-y: auto;
-        }
-
-        /* Flash Messages */
-        .flash-message {
-            padding: 1rem 2rem;
-            margin-bottom: 2rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            animation: slideIn 0.3s ease;
-        }
-
-        .flash-message.success {
-            background-color: rgba(50, 205, 50, 0.1);
-            color: var(--success-color);
-            border: 1px solid var(--success-color);
-        }
-
-        .flash-message.error {
-            background-color: rgba(220, 20, 60, 0.1);
-            color: var(--danger-color);
-            border: 1px solid var(--danger-color);
-        }
-
-        .flash-message.warning {
-            background-color: rgba(255, 99, 71, 0.1);
-            color: var(--warning-color);
-            border: 1px solid var(--warning-color);
-        }
-
-        .flash-message.info {
-            background-color: rgba(255, 215, 0, 0.1);
-            color: var(--info-color);
-            border: 1px solid var(--info-color);
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 992px) {
-            .main-content {
-                margin-left: 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .content-area {
-                padding: 1rem;
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-2rem);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="admin-layout">
-        <!-- Include Sidebar -->
-        <?php include 'includes/sidebar.php'; ?>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="../images/logo.png" alt="AI-Solutions Logo">
+                    <span>AI-Solutions</span>
+                </div>
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="menu-section">
+                    <h4 class="menu-section-title">Main</h4>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <a href="index.php" class="menu-link <?php echo ($current_page === 'index.php') ? 'active' : ''; ?>">
+                                <i class="menu-icon fas fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="inquiries.php" class="menu-link <?php echo ($current_page === 'inquiries.php') ? 'active' : ''; ?>">
+                                <i class="menu-icon fas fa-envelope"></i>
+                                <span>Manage Inquiries</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="analytics.php" class="menu-link <?php echo ($current_page === 'analytics.php') ? 'active' : ''; ?>">
+                                <i class="menu-icon fas fa-chart-bar"></i>
+                                <span>Visitor Analytics</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="menu-section">
+                    <h4 class="menu-section-title">Content</h4>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <a href="logo.php" class="menu-link <?php echo ($current_page === 'logo.php') ? 'active' : ''; ?>">
+                                <i class="menu-icon fas fa-image"></i>
+                                <span>Logo Management</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="portfolio.php" class="menu-link <?php echo ($current_page === 'portfolio.php') ? 'active' : ''; ?>">
+                                <i class="menu-icon fas fa-briefcase"></i>
+                                <span>Portfolio Management</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="events.php" class="menu-link <?php echo ($current_page === 'events.php') ? 'active' : ''; ?>">
+                                <i class="menu-icon fas fa-calendar"></i>
+                                <span>Events Management</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="blogs.php" class="menu-link <?php echo ($current_page === 'blogs.php') ? 'active' : ''; ?>">
+                                <i class="menu-icon fas fa-blog"></i>
+                                <span>Blog Management</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="gallery.php" class="menu-link <?php echo ($current_page === 'gallery.php') ? 'active' : ''; ?>">
+                                <i class="menu-icon fas fa-images"></i>
+                                <span>Manage Gallery</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="menu-section">
+                    <h4 class="menu-section-title">User</h4>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <a href="users.php" class="menu-link <?php echo ($current_page === 'users.php') ? 'active' : ''; ?>">
+                                <i class="menu-icon fas fa-users"></i>
+                                <span>Manage Users</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="password.php" class="menu-link <?php echo ($current_page === 'password.php') ? 'active' : ''; ?>">
+                                <i class="menu-icon fas fa-key"></i>
+                                <span>Change Password</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="logout.php" class="menu-link">
+                                <i class="menu-icon fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
 
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Include Admin Header -->
-            <?php include 'includes/admin-header.php'; ?>
+            <!-- Admin Header -->
+            <header class="admin-header">
+                <div class="header-title">
+                    <h1><?php echo isset($page_title) ? $page_title : 'Dashboard'; ?></h1>
+                </div>
+
+                <div class="header-actions">
+                    <div class="user-dropdown">
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                <?php echo strtoupper(substr($admin_username, 0, 2)); ?>
+                            </div>
+                            <span class="user-name"><?php echo htmlspecialchars($admin_username); ?></span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+            </header>
 
             <!-- Content Area -->
             <div class="content-area">
