@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Contact Us - AI-Solutions</title>
+	<meta name="description" content="Get in touch with AI-Solutions for AI-powered software solutions to improve your digital employee experience. Contact us today to discuss your requirements.">
+	<meta name="keywords" content="AI Solutions, Contact, AI Software, Virtual Assistant, Digital Employee Experience, Business Innovation">
+	<meta name="author" content="AI-Solutions">
+
+	<!-- CSS Files -->
+	<link rel="stylesheet" href="css/styles.css">
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+	 rel="stylesheet">
+
+	<!-- Favicon -->
+	<link rel="icon" href="images/logo.png" type="image/png">
+</head>
+
+<body>
+	<!-- Header Section -->
+	<header id="header">
+		<div class="container">
+			<div class="header-content">
+				                <div class="logo">
+                    <a href="index.html">
+                        <img src="images/logo.png" alt="AI-Solutions Logo" class="logo-img">
+                        <span class="logo-text">AI-Solutions</span>
+                    </a>
+                </div>
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="portfolio.php">Portfolio</a></li>
+                        <li><a href="events.php">Events</a></li>
+                        <li><a href="blogs.php">Blogs</a></li>
+                        <li><a href="gallery.php">Gallery</a></li>
+                        <li><a href="contact.html" class="active">Contact</a></li>
+                    </ul>
+                    <div class="admin-btn">
+                        <a href="admin/login.php" class="btn">Go Admin</a>
+                    </div>
+                    <div class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Banner -->
+    <section class="page-banner">
+        <div class="container">
+            <div class="banner-content">
+                <h1>Contact Us</h1>
+                <ul class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li>Contact</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact-details" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get In Touch</h2>
+                <p>Contact us today to discuss how our AI solutions can enhance your digital employee experience and drive business innovation.</p>
+            </div>
+
+            <div class="contact-info-grid">
+                <div class="contact-info-card">
+                    <div class="icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="info">
+                        <h3>Our Location</h3>
+                        <p>1 Software Way, Sunderland, UK</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-card">
+                    <div class="icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div class="info">
+                        <h3>Call Us</h3>
+                        <p><a href="tel:+441911234567">+44 191 123 4567</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-info-card">
+                    <div class="icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="info">
+                        <h3>Email Us</h3>
+                        <p><a href="mailto:info@ai-solutions.com">info@ai-solutions.com</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-info-card">
+                    <div class="icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="info">
+                        <h3>Working Hours</h3>
+                        <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section id="contact-form" class="section bg-light">
+        <div class="container">
+            <div class="contact-grid">
+                <div  id="map" class="contact-image">
+        <div class="container">
+            <div class="map-wrapper">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d71985.16694867332!2d-1.4664033561254248!3d54.9041432445906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487e66d012b85e5b%3A0xadf4dd40b4c18fd9!2sSunderland%2C%20UK!5e0!3m2!1sen!2sus!4v1658302952356!5m2!1sen!2sus" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+                </div>
+
+                <div class="contact-form-wrapper">
+                    <div class="form-header">
+                        <h2>Send Us a Message</h2>
+                        <p>Fill out the form below and we'll get back to you as soon as possible.</p>
+                    </div>
+
+                    <!-- Success Message (Initially Hidden) -->
+                    <div id="successMessage" class="success-message" style="display: none;">
+                        <i class="fas fa-check-circle"></i>
+                        <p>Thank you for your inquiry! We will get back to you soon.</p>
+                    </div>
+
+                    <!-- Error Message (Initially Hidden) -->
+                    <div id="errorMessage" class="error-message" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p id="errorText">There was an error submitting your form. Please try again.</p>
+                    </div>
+
+                    <form action="process_form.php" method="POST" id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="company">Company Name</label>
+                                <input type="text" id="company" name="company" placeholder="Enter your company name">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="country">Country</label>
+                                <input type="text" id="country" name="country" placeholder="Enter your country" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="job_title">Job Title</label>
+                                <input type="text" id="job_title" name="job_title" placeholder="Enter your job title" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Inquiry Message</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Tell us about your specific job requirements and how we can help" required></textarea>
+                        </div>
+
+                        <div class="form-submit">
+                            <button type="submit" class="btn btn-primary">Submit Inquiry</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="images/logo.png" alt="AI-Solutions Logo">
+                        <span>AI-Solutions</span>
+                    </div>
+                    <p>At AI-Solutions, we harness the power of AI to enhance digital employee experiences, driving innovation and productivity for businesses worldwide.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Useful Links</h3>
+                    <ul>
+                        <li><a href="services.html">Our Solutions</a></li>
+                        <li><a href="portfolio.php">Customer Stories</a></li>
+                        <li><a href="services.html#ai-prototyping">AI Prototyping</a></li>
+                        <li><a href="events.php">Events</a></li>
+                        <li><a href="#">Terms & Policies</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="portfolio.php">Portfolio</a></li>
+                        <li><a href="blogs.php">Blogs</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> <span>1 Software Way, Sunderland, UK</span></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+441911234567">+44 191 123 4567</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:info@ai-solutions.com">info@ai-solutions.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="year"></span> AI-Solutions. All rights reserved. | Designed with <i class="fas fa-heart"></i> by AI-Solutions Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script>
+        // Check URL parameters for success or error messages
+        window.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const successParam = urlParams.get('success');
+            const errorParam = urlParams.get('error');
+
+            if (successParam === '1') {
+                document.getElementById('successMessage').style.display = 'flex';
+                // Scroll to the message
+                document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            if (errorParam) {
+                document.getElementById('errorMessage').style.display = 'flex';
+                document.getElementById('errorText').textContent = decodeURIComponent(errorParam.replace(/\+/g, ' '));
+                // Scroll to the message
+                document.getElementById('errorMessage').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    </script>
+
+    <!-- Floating Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-box">
+            <div class="chatbot-header">
+                <h3><i class="fas fa-robot"></i> AI Assistant</h3>
+                <div class="chatbot-close"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="chatbot-messages">
+                <div class="chatbot-message bot">
+                    <div class="message-content">
+                        Hi there! 👋 I'm your AI assistant. How can I help you today with our AI solutions?
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" placeholder="Type your message here..." id="chatbot-input-field">
+                <button class="chatbot-submit" id="chatbot-submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        <div class="chatbot-toggle">
+            <i class="fas fa-comments"></i>
+        </div>
+    </div>
+</body>
+</html>

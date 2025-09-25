@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services - AI-Solutions</title>
+    <meta name="description" content="Explore AI-Solutions' comprehensive range of AI-powered services including AI virtual assistants, affordable prototyping solutions, and custom AI software for digital employee experience.">
+    <meta name="keywords" content="AI Services, Virtual Assistants, Workflow Automation, Predictive Analytics, AI Consulting, Custom AI Solutions">
+    <meta name="author" content="AI-Solution">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/logo.png" type="image/png">
+
+    <style>
+        /* Additional styles for Services page */
+        .service-section {
+            padding: 8rem 0;
+        }
+
+        .service-section:nth-child(even) {
+            background-color: var(--gray-light);
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+            gap: 3rem;
+        }
+
+        .feature-list {
+            margin: 2rem 0;
+        }
+
+        .feature-list li {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.8rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            background-color: rgba(79, 70, 229, 0.1);
+            border-radius: 50%;
+        }
+
+        .feature-list li::after {
+            content: '✓';
+            position: absolute;
+            left: 0.3rem;
+            top: 0.4rem;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .service-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .service-image img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.5s ease;
+        }
+
+        .service-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .service-content {
+            padding: 2rem 0;
+        }
+
+        .service-content h2 {
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .service-content h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1rem;
+            width: 5rem;
+            height: 0.3rem;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .service-content p {
+            margin-bottom: 2rem;
+        }
+
+        .service-cta {
+            margin-top: 2rem;
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            display: inline-block;
+            background-color: rgba(79, 70, 229, 0.1);
+            padding: 1.5rem;
+            border-radius: 1rem;
+        }
+
+        .service-detail-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .service-detail-card {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .service-detail-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .service-detail-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .service-detail-card p {
+            color: var(--gray-color);
+            margin-bottom: 0;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .process-step {
+            position: relative;
+            padding-left: 8rem;
+            counter-increment: step-counter;
+        }
+
+        .process-step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 6rem;
+            height: 6rem;
+            background-color: rgba(79, 70, 229, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .process-step h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .process-step p {
+            color: var(--gray-color);
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .service-image {
+                margin-bottom: 3rem;
+            }
+
+            .process-step {
+                padding-left: 0;
+                padding-top: 8rem;
+            }
+
+            .process-step::before {
+                left: 0;
+                top: 0;
+            }
+        }
+
+        /* Chatbot Styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none; /* Hidden by default */
+            flex-direction: column;
+        }
+
+        .chatbot-box {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .chatbot-header {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-messages {
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .chatbot-message {
+            margin: 5px 0;
+        }
+
+        .chatbot-message.bot .message-content {
+            background: #e9ecef;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+
+        .chatbot-toggle {
+            cursor: pointer;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .service-detail {
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header id="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="images/logo.png" alt="AI-Solution Logo" class="logo-img">
+                        <span class="logo-text">AI-Solution</span>
+                    </a>
+                </div>
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="services.html" class="active">Services</a></li>
+                        <li><a href="portfolio.php">Portfolio</a></li>
+                        <li><a href="events.php">Events</a></li>
+                        <li><a href="blogs.php">Blogs</a></li>
+                        <li><a href="gallery.php">Gallery</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                    <div class="admin-btn">
+                        <a href="admin/login.php" class="btn">Go Admin</a>
+                    </div>
+                    <div class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Banner -->
+    <section class="page-banner">
+        <div class="container">
+            <div class="banner-content">
+                <h1>Our Services</h1>
+                <ul class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li>Services</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Overview -->
+    <section class="service-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>AI-Powered Solutions</h2>
+                <p>We help organizations leverage artificial intelligence to enhance employee experience, streamline operations, and drive business growth through innovative solutions tailored to your specific needs.</p>
+            </div>
+
+            <div class="service-detail-cards">
+                <div class="service-detail-card">
+                    <div class="service-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI Virtual Assistants</h3>
+                    <p>Smart assistants that help employees navigate complex systems and find information quickly.</p>
+                </div>
+
+                <div class="service-detail-card">
+                    <div class="service-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>Workflow Automation</h3>
+                    <p>AI-powered automation that streamlines business processes and eliminates repetitive tasks.</p>
+                </div>
+
+                <div class="service-detail-card">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Predictive Analytics</h3>
+                    <p>Advanced analytics that helps predict trends and make data-driven business decisions.</p>
+                </div>
+
+                <div class="service-detail-card">
+                    <div class="service-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>Custom AI Development</h3>
+                    <p>Bespoke AI solutions tailored to your specific business needs and integrated with your existing systems.</p>
+                </div>
+
+                <div class="service-detail-card">
+                    <div class="service-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI Consulting</h3>
+                    <p>Expert guidance on AI strategy, implementation, and optimization for your organization.</p>
+                </div>
+
+                <div class="service-detail-card">
+                    <div class="service-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>AI Training & Workshops</h3>
+                    <p>Comprehensive training programs to build AI literacy and skills within your organization.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service 1: AI Virtual Assistants -->
+    <section id="virtual-assistants" class="service-section bg-light">
+        <div class="container">
+            <div class="service-grid">
+                <div class="service-image">
+                    <img src="images/robot-assistant.jpg" alt="AI Virtual Assistants">
+                </div>
+                <div class="service-content">
+                    <div class="service-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h2>AI Virtual Assistants</h2>
+                    <p>Our AI Virtual Assistants utilize cutting-edge natural language processing and machine learning algorithms to provide instant responses to employee queries. These virtual assistants can be integrated with your existing systems to help employees find information, complete tasks, and navigate complex processes with ease.</p>
+
+                    <h3>Key Features:</h3>
+                    <ul class="feature-list">
+                        <li>Natural language understanding for human-like interactions</li>
+                        <li>Integration with existing enterprise systems and knowledge bases</li>
+                        <li>Continuous learning and improvement from user interactions</li>
+                        <li>Multi-channel deployment (web, mobile, voice, chat)</li>
+                        <li>Analytics dashboard to track usage and performance</li>
+                    </ul>
+
+                    <div class="service-cta">
+                        <a href="contact.html" class="btn btn-primary">Discuss Your Requirements</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service 2: Workflow Automation -->
+    <section id="workflow-automation" class="service-section">
+        <div class="container">
+            <div class="service-grid">
+                <div class="service-content">
+                    <div class="service-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h2>Workflow Automation</h2>
+                    <p>Our Workflow Automation solutions leverage artificial intelligence to identify, optimize, and automate repetitive business processes. By analyzing your current workflows, we can identify bottlenecks and inefficiencies, then implement intelligent automation to streamline operations.</p>
+
+                    <h3>Key Features:</h3>
+                    <ul class="feature-list">
+                        <li>AI-powered workflow analysis and optimization</li>
+                        <li>Intelligent document processing and data extraction</li>
+                        <li>Automated decision-making based on predefined rules</li>
+                        <li>Real-time monitoring and reporting</li>
+                        <li>Seamless integration with existing systems</li>
+                    </ul>
+
+                    <div class="service-cta">
+                        <a href="contact.html" class="btn btn-primary">Request a Demo</a>
+                    </div>
+                </div>
+                <div class="service-image">
+                    <img src="images/ai-chip.jpg" alt="Workflow Automation">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service 3: Predictive Analytics -->
+    <section id="predictive-analytics" class="service-section bg-light">
+        <div class="container">
+            <div class="service-grid">
+                <div class="service-image">
+                    <img src="images/ai-virtual.jpg" alt="Predictive Analytics">
+                </div>
+                <div class="service-content">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h2>Predictive Analytics</h2>
+                    <p>Our Predictive Analytics service utilizes sophisticated machine learning models to analyze historical data and identify patterns that can predict future outcomes. By leveraging these insights, your business can anticipate market trends, customer behaviors, and operational challenges before they occur.</p>
+
+                    <h3>Key Features:</h3>
+                    <ul class="feature-list">
+                        <li>Advanced data modeling and pattern recognition</li>
+                        <li>Interactive dashboards for data visualization</li>
+                        <li>Customizable alert systems for predicted changes</li>
+                        <li>Integration with existing business intelligence tools</li>
+                        <li>Regular model retraining for improved accuracy</li>
+                    </ul>
+
+                    <div class="service-cta">
+                        <a href="contact.html" class="btn btn-primary">Schedule a Consultation</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How We Work Section -->
+    <section class="service-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Process</h2>
+                <p>We follow a structured approach to develop and implement AI solutions that are tailored to your specific business needs and objectives.</p>
+            </div>
+
+            <div class="process-steps">
+                <div class="process-step">
+                    <h3>Discovery & Assessment</h3>
+                    <p>We begin by understanding your business challenges, processes, and objectives through comprehensive assessments and stakeholder interviews.</p>
+                </div>
+
+                <div class="process-step">
+                    <h3>Solution Design</h3>
+                    <p>Our team designs a custom AI solution that addresses your specific needs, leveraging the most appropriate technologies and approaches.</p>
+                </div>
+
+                <div class="process-step">
+                    <h3>Development & Training</h3>
+                    <p>We develop and train the AI models using your data, ensuring they deliver accurate and reliable results for your specific use cases.</p>
+                </div>
+
+                <div class="process-step">
+                    <h3>Integration & Testing</h3>
+                    <p>The solution is integrated with your existing systems and rigorously tested to ensure seamless functionality and optimal performance.</p>
+                </div>
+
+                <div class="process-step">
+                    <h3>Deployment & Support</h3>
+                    <p>We deploy the solution to your production environment and provide ongoing support, monitoring, and optimization services.</p>
+                </div>
+
+                <div class="process-step">
+                    <h3>Continuous Improvement</h3>
+                    <p>We regularly review and refine the solution based on performance data and changing business needs to maximize its long-term value.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta" class="section bg-primary">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Transform Your Business with AI?</h2>
+                <p>Contact us today to discuss how our AI solutions can enhance your digital employee experience and drive business innovation.</p>
+                <a href="contact.html" class="btn btn-light">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="images/logo.png" alt="AI-Solution Logo">
+                        <span>AI-Solution</span>
+                    </div>
+                    <p>At AI-Solution, we harness the power of AI to enhance digital employee experiences, driving innovation and productivity for businesses worldwide.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Useful Links</h3>
+                    <ul>
+                        <li><a href="services.html">Our Solutions</a></li>
+                        <li><a href="portfolio.php">Customer Stories</a></li>
+                        <li><a href="services.html#ai-prototyping">AI Prototyping</a></li>
+                        <li><a href="events.php">Events</a></li>
+                        <li><a href="#">Terms & Policies</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="portfolio.php">Portfolio</a></li>
+                        <li><a href="blogs.php">Blogs</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> <span>1 Software Way, Sunderland, UK</span></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+441911234567">+44 191 123 4567</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:info@ai-solution.com">info@ai-solution.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="year"></span> AI-Solution. All rights reserved. | Designed with <i class="fas fa-heart"></i> by AI-Solution Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/analytics.js"></script>
+
+    <!-- Floating Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-box">
+            <div class="chatbot-header">
+                <h3><i class="fas fa-robot"></i> AI Assistant</h3>
+                <div class="chatbot-close"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="chatbot-messages">
+                <div class="chatbot-message bot">
+                    <div class="message-content">
+                        Hi there! 👋 I'm your AI assistant. How can I help you today with our AI solutions?
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" placeholder="Type your message here..." id="chatbot-input-field">
+                <button class="chatbot-submit" id="chatbot-submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        <div class="chatbot-toggle">
+            <i class="fas fa-comments"></i>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - AI-Solution</title>
+    <meta name="description" content="Learn about AI-Solution, our mission to transform businesses through AI innovation, our team, and our commitment to enhancing digital employee experiences.">
+    <meta name="keywords" content="AI Solutions, About Us, Company Mission, AI Team, Company Vision, AI Software">
+    <meta name="author" content="AI-Solution">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/logo.png" type="image/png">
+
+    <style>
+        /* Additional styles for About page */
+        .about-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.5s ease;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .about-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-content h2 {
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .about-content h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1rem;
+            width: 5rem;
+            height: 0.3rem;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .mission-vision {
+            background-color: var(--gray-light);
+            padding: 4rem 0;
+        }
+
+        .mission-vision-card {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            height: 100%;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .mission-vision-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .mission-vision-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            display: inline-block;
+            background-color: rgba(79, 70, 229, 0.1);
+            padding: 1.5rem;
+            border-radius: 1rem;
+        }
+
+        .team-section {
+            padding: 8rem 0;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+            gap: 3rem;
+        }
+
+        .team-card {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .team-img {
+            position: relative;
+            height: 25rem;
+            overflow: hidden;
+        }
+
+        .team-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .team-card:hover .team-img img {
+            transform: scale(1.05);
+        }
+
+        .team-content {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .team-content h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-content p {
+            color: var(--gray-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .team-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .team-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            background-color: var(--gray-light);
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .team-social a:hover {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+        }
+
+        .values-section {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            padding: 8rem 0;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+            gap: 3rem;
+        }
+
+        .value-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            transition: var(--transition);
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+        }
+
+        .value-card h3 {
+            color: var(--light-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .value-card p {
+            color: var(--gray-light);
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-image {
+                margin-bottom: 3rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header id="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="images/logo.png" alt="AI-Solution Logo" class="logo-img">
+                        <span class="logo-text">AI-Solution</span>
+                    </a>
+                </div>
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html" class="active">About Us</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="portfolio.php">Portfolio</a></li>
+                        <li><a href="events.php">Events</a></li>
+                        <li><a href="blogs.php">Blogs</a></li>
+                        <li><a href="gallery.php">Gallery</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                    <div class="admin-btn">
+                        <a href="admin/login.php" class="btn">Go Admin</a>
+                    </div>
+                    <div class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Banner -->
+    <section class="page-banner">
+        <div class="container">
+            <div class="banner-content">
+                <h1>About AI-Solution</h1>
+                <ul class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li>About Us</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section section">
+        <div class="container">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 about-grid">
+                <div class="about-content">
+                    <h2>Our Story</h2>
+                    <p>Founded in 2020, AI-Solution emerged from a simple yet powerful vision: to harness the potential of artificial intelligence to enhance digital employee experiences and drive business growth. Our founders, a team of AI specialists and workplace innovation experts, recognized that while AI technology was advancing rapidly, many organizations struggled to implement it effectively to support their employees.</p>
+
+                    <p>Starting with a small team in Sunderland, UK, we developed our first AI virtual assistant solution to help employees navigate complex information systems. The success of this initial project quickly led to expansion, as businesses across various industries saw the value of our human-centered approach to AI implementation.</p>
+
+                    <p>Today, AI-Solution has grown into a leading provider of AI-powered software solutions, with a team of 50+ specialists working with clients globally. Our commitment remains the same: to develop innovative, ethical AI solutions that enhance the digital employee experience and drive meaningful business outcomes.</p>
+
+                    <p>We believe that the true value of AI technology lies not in replacing human capabilities, but in amplifying them, allowing employees to focus on creative, strategic work while AI handles routine tasks and information processing. This philosophy guides everything we do.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission and Vision -->
+    <section class="mission-vision section">
+        <div class="container">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="mission-vision-card">
+                    <div class="mission-vision-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h2>Our Mission</h2>
+                    <p>To innovate, promote, and deliver the future of the digital employee experience through ethical and effective AI solutions that amplify human capabilities and drive business growth.</p>
+                    <p>We are committed to creating AI-powered tools that make work more efficient, enjoyable, and productive, allowing employees to focus on the creative and strategic aspects of their roles while AI handles routine tasks and information processing.</p>
+                </div>
+
+                <div class="mission-vision-card">
+                    <div class="mission-vision-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h2>Our Vision</h2>
+                    <p>To become the global leader in AI-powered solutions for enhancing employee experience and business performance, recognized for our innovation, ethical approach, and measurable impact.</p>
+                    <p>We envision a future where every organization can leverage AI technology to create more human-centric workplaces, where technology serves people, not the other way around. Our solutions will set the standard for how AI can enhance work rather than replace it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Values Section -->
+    <section class="values-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>Our Core Values</h2>
+                <p>The principles that guide our work and define our company culture</p>
+            </div>
+
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Human-Centered</h3>
+                    <p>We design solutions with people at the center, ensuring technology enhances rather than replaces human capabilities.</p>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Innovation</h3>
+                    <p>We constantly push the boundaries of what's possible with AI, exploring new approaches and technologies to solve complex problems.</p>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h3>Ethics</h3>
+                    <p>We are committed to the ethical development and deployment of AI, with transparency, fairness, and privacy as core considerations.</p>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Impact</h3>
+                    <p>We measure our success by the tangible business outcomes and improved experiences our solutions deliver.</p>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3>Collaboration</h3>
+                    <p>We believe in working closely with our clients and partners, combining expertise to achieve extraordinary results.</p>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3>Continuous Learning</h3>
+                    <p>We foster a culture of curiosity and growth, staying at the forefront of AI advancements and industry best practices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>Meet Our Team</h2>
+                <p>The brilliant minds behind our AI innovations</p>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="images/team-1.jpg" alt="Dr. James Wilson">
+                    </div>
+                    <div class="team-content">
+                        <h3>Dr. James Wilson</h3>
+                        <p>CEO & Co-Founder</p>
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="far fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="images/team-2.jpg" alt="Dr. Sarah Johnson">
+                    </div>
+                    <div class="team-content">
+                        <h3>Dr. Sarah Johnson</h3>
+                        <p>CTO & Co-Founder</p>
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="far fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="images/team-3.jpeg" alt="Michael Chen">
+                    </div>
+                    <div class="team-content">
+                        <h3>Michael Chen</h3>
+                        <p>Head of AI Research</p>
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="far fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="images/team-4.jpg" alt="Emily Thompson">
+                    </div>
+                    <div class="team-content">
+                        <h3>Emily Thompson</h3>
+                        <p>Director of Client Solutions</p>
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="far fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta" class="section bg-primary">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Transform Your Business with AI?</h2>
+                <p>Contact us today to discuss how our AI solutions can enhance your digital employee experience and drive business innovation.</p>
+                <a href="contact.html" class="btn btn-light">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="images/logo.png" alt="AI-Solution Logo">
+                        <span>AI-Solution</span>
+                    </div>
+                    <p>At AI-Solution, we harness the power of AI to enhance digital employee experiences, driving innovation and productivity for businesses worldwide.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Useful Links</h3>
+                    <ul>
+                        <li><a href="services.html">Our Solutions</a></li>
+                        <li><a href="portfolio.php">Customer Stories</a></li>
+                        <li><a href="services.html#ai-prototyping">AI Prototyping</a></li>
+                        <li><a href="events.php">Events</a></li>
+                        <li><a href="#">Terms & Policies</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="portfolio.php">Portfolio</a></li>
+                        <li><a href="blogs.php">Blogs</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> <span>1 Software Way, Sunderland, UK</span></li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+441911234567">+44 191 123 4567</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:info@ai-solution.com">info@ai-solution.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="year"></span> AI-Solution. All rights reserved. | Designed with <i class="fas fa-heart"></i> by AI-Solution Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+
+    <!-- Floating Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-box">
+            <div class="chatbot-header">
+                <h3><i class="fas fa-robot"></i> AI Assistant</h3>
+                <div class="chatbot-close"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="chatbot-messages">
+                <div class="chatbot-message bot">
+                    <div class="message-content">
+                        Hi there! 👋 I'm your AI assistant. How can I help you today with our AI solutions?
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" placeholder="Type your message here..." id="chatbot-input-field">
+                <button class="chatbot-submit" id="chatbot-submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        <div class="chatbot-toggle">
+            <i class="fas fa-comments"></i>
+        </div>
+    </div>
+</body>
+</html>
